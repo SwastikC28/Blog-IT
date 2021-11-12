@@ -30,7 +30,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.updatetUser = asyncHandler(async (req, res, next) => {
+exports.updateUser = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     runValidators: true,
     new: true,

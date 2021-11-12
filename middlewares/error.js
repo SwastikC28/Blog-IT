@@ -1,6 +1,5 @@
 const { json } = require("express");
-const ErrorResponse = require("../utils/errorResponse");
-
+const ErrorResponse = require("../utils/errorHandler");
 
 // Function starts
 const errorHandler = (err, req, res, next) => {
@@ -34,4 +33,4 @@ const errorHandler = (err, req, res, next) => {
     .json({ success: false, error: error.message || "Server Error" });
 };
 
-module.exports = errorHandler
+module.exports = errorHandler;

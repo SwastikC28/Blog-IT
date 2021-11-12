@@ -22,7 +22,7 @@ connectDB();
 app.use("/api/user", user);
 
 // Using Middlewares
-app.use(errorHandler());
+app.use(errorHandler);
 
 let PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
