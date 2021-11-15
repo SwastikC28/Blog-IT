@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 const {
   getUsers,
@@ -9,7 +9,13 @@ const {
   deleteUser,
 } = require("../controllers/user");
 
-router.route("/user").get(getUsers).post(createUser);
-router.route("/user/:id").get(getUser).put(updateUser).delete(deleteUser);
+// Get blogs router
+const blogRouter = require("./blog");
+
+// Re-route
+router.route("/:userId/blogs", blogRouter);
+
+router.route("/").get(getUsers).post(createUser);
+router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 
 module.exports = router;
