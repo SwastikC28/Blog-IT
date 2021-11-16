@@ -2,50 +2,57 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Please Add a Name"],
-  },
-  email: {
-    type: String,
-    required: [true, "Please Add An Email"],
-    unique: true,
-    match: [
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Please Add A valid Email",
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Please Add a Name"],
+    },
+    email: {
+      type: String,
+      required: [true, "Please Add An Email"],
+      unique: true,
+      match: [
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please Add A valid Email",
+      ],
+    },
+
+    role: {
+      type: String,
+      enum: ["user", "publisher", "admin"],
+    },
+
+    password: {
+      type: String,
+      required: [true, "Please add a Password"],
+      minlength: 6,
+      select: false,
+    },
+
+    favBlogs: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Blog",
+      },
     ],
-  },
-
-  role: {
-    type: String,
-    enum: ["user", "publisher", "admin"],
-  },
-
-  password: {
-    type: String,
-    required: [true, "Please add a Password"],
-    minlength: 6,
-    select: false,
-  },
-
-  blogs: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Blog",
+    createdAt: {
+      type: Date,
+      default: Date.now(),
     },
-  ],
-
-  favBlogs: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Blog",
-    },
-  ],
-  createdAt: {
-    type: Date,
-    default: Date.now(),
   },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+// Reverse Populate
+UserSchema.virtual("blogs", {
+  ref: "Blog",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
 });
 
 // Hashing Passwords

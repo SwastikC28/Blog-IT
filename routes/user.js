@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router({ mergeParams: true });
+const router = express.Router();
 
 const {
   getUsers,
@@ -13,7 +13,7 @@ const {
 const blogRouter = require("./blog");
 
 // Re-route
-router.route("/:userId/blogs", blogRouter);
+router.use("/:userId/blogs", blogRouter);
 
 router.route("/").get(getUsers).post(createUser);
 router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);

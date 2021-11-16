@@ -7,7 +7,7 @@ const User = require("../models/User");
 //@route /api/blog
 //access PRIVATE
 exports.getBlogs = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.find();
+  const blog = await Blog.find().populate({ path: "user" });
 
   res.status(200).json({
     success: true,
@@ -32,7 +32,7 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
 });
 
 //request POST
-//@route /api/blog
+//@route /api/user/:userId/blogs
 //access PRIVATE
 exports.createBlog = asyncHandler(async (req, res, next) => {
   req.body.user = req.params.userId;
