@@ -13,7 +13,7 @@ const {
 const blogRouter = require("./blog");
 
 // Re-route
-router.use("/:userId/blogs", blogRouter);
+// router.use("/:userId/blogs", blogRouter);
 
 router.route("/").get(getUsers).post(createUser);
 router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);

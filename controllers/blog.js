@@ -33,17 +33,27 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
   });
 });
 
+//request GET
+//@route /api/:userId/blogs
+//access PUBLIC
+exports.getUsersBlog = asyncHandler(async (req, res, next) => {
+  const blogs = await Blog.find({ user: req.user.id });
+
+  if (!blogs) {
+    return next(new errorHandler(`Blogs Not Found`, 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: blog,
+  });
+});
+
 //request POST
-//@route /api/user/:userId/blogs
+//@route /api/blog
 //access PRIVATE
 exports.createBlog = asyncHandler(async (req, res, next) => {
-  req.body.user = req.params.userId;
-
-  const user = await User.findById(req.body.user);
-
-  if (!user) {
-    return next(new errorHandler(`User does not exist`, 401));
-  }
+  req.body.user = req.user.id;
 
   const blog = await Blog.create(req.body);
 
@@ -57,14 +67,27 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 //@route /api/blog/:id
 //access PRIVATE
 exports.updateBlog = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+  const blog = await Blog.findById(req.params.id);
+
+  if (!blog) {
+    return next(new errorHandler(`Blog Not Found`, 404));
+  }
+
+  // Check for Blog user's Ownership
+  if (blog.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new errorHandler(
+        `User ${req.user.id} is not authorized to update this blog`,
+        403
+      )
+    );
+  }
+
+  blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
     runValidators: true,
     new: true,
   });
 
-  if (!blog) {
-    return next(new errorHandler(`blog Not Found`, 404));
-  }
   res.status(200).json({
     success: true,
     data: blog,
@@ -80,6 +103,19 @@ exports.deleteBlog = asyncHandler(async (req, res, next) => {
   if (!blog) {
     return next(new errorHandler(`blog Not Found`, 404));
   }
+
+  // Check for Blog user's Ownership
+  if (blog.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new errorHandler(
+        `User ${req.user.id} is not authorized to delete this blog`,
+        403
+      )
+    );
+  }
+
+  blog = await Blog.findByIdAndDelete(req.params.id);
+
   res.status(200).json({
     success: true,
     message: "Blog Deleted Successfully",

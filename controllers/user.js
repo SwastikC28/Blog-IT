@@ -2,7 +2,12 @@ const asyncHandler = require("../middlewares/async");
 const errorHandler = require("../utils/errorHandler");
 const User = require("../models/User");
 
+//request GET
+//@route /api/user
+//access PRIVATE
 exports.getUsers = asyncHandler(async (req, res, next) => {
+  const reqQuery = req.query;
+
   const user = await User.find().populate("blogs");
   res.status(200).json({
     success: true,
@@ -10,6 +15,9 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
   });
 });
 
+//request GET
+//@route /api/user/:userId
+//access PRIVATE
 exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id).populate({ path: "blogs" });
 
@@ -22,6 +30,9 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+//request POST
+//@route /api/user
+//access PRIVATE
 exports.createUser = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
   res.status(200).json({
@@ -30,6 +41,9 @@ exports.createUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+//request PUT
+//@route /api/user/:userId
+//access PRIVATE
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     runValidators: true,
@@ -45,6 +59,9 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+//request DELETE
+//@route /api/user/:userId
+//access PRIVATE
 exports.deleteUser = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.id);
 
