@@ -1,7 +1,6 @@
 const asyncHandler = require("../middlewares/async");
 const errorHandler = require("../utils/errorHandler");
 const User = require("../models/User");
-const { createBlog } = require("./blog");
 
 exports.register = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
@@ -31,7 +30,14 @@ exports.login = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
-//Get Token from model,create cookie and send response
+// Get Currently Logged In User
+exports.getMe = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.json({ message: "User Logged In", data: user });
+});
+
+// Get Token from model,create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
   //Create Token
   const token = user.getSignedJwtToken();
