@@ -4,6 +4,7 @@ const colors = require("colors");
 const connectDB = require("./config/db");
 const morgan = require("morgan");
 const errorHandler = require("./middlewares/error");
+const cookieParser = require("cookie-parser");
 
 //Initializing env var
 dotenv.config({ path: "./config/config.env" });
@@ -27,6 +28,7 @@ app.use("/api/auth", auth);
 
 // Using Middlewares
 app.use(errorHandler);
+app.use(cookieParser());
 
 let PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {

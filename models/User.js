@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { createBlog } = require("../controllers/blog");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -56,7 +57,7 @@ UserSchema.pre("save", async function (next) {
 });
 
 // Sign JWT and Return
-UserSchema.methods.getSignedJwtToken = function (next) {
+UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });

@@ -1,6 +1,7 @@
 const asyncHandler = require("../middlewares/async");
 const errorHandler = require("../utils/errorHandler");
 const User = require("../models/User");
+const { createBlog } = require("./blog");
 
 exports.register = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
@@ -8,9 +9,9 @@ exports.register = asyncHandler(async (req, res, next) => {
 });
 
 exports.login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
 
-  const user = await User.find({ email });
+  const user = await User.findOne({ email }).select("+password");
 
   if (!email || !password) {
     return next(new errorHandler(`Please provide an email and password`, 401));
@@ -21,7 +22,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     return next(new errorHandler("Invalid Credentials", 401));
   }
 
-  isMatch = await user.checkPassword(password);
+  let isMatch = await user.checkPassword(password);
 
   if (!isMatch) {
     return next(new errorHandler(`Invalid Credentials`, 401));

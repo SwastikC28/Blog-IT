@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
-const {
-  getBlog,
-  getBlogs,
-  createBlog,
-  updateBlog,
-  deleteBlog,
-} = require("../controllers/blog");
+const { register, login } = require("../controllers/auth");
 
-router.route("/").get(getBlogs).post(createBlog);
-router.route("/:id").get(getBlog).put(updateBlog).delete(deleteBlog);
+router.route("/register").post(register);
+router.route("/login").post(login);
 
 module.exports = router;
