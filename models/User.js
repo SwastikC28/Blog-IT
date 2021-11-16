@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["user", "publisher", "admin"],
+      enum: ["user", "admin"],
     },
 
     password: {
@@ -30,12 +30,6 @@ const UserSchema = new mongoose.Schema(
       select: false,
     },
 
-    favBlogs: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Blog",
-      },
-    ],
     createdAt: {
       type: Date,
       default: Date.now(),

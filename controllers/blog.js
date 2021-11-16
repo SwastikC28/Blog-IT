@@ -7,8 +7,7 @@ const User = require("../models/User");
 //@route /api/blog
 //access PRIVATE
 exports.getBlogs = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.find().populate({ path: "user" });
-
+  const blog = await Blog.find();
   res.status(200).json({
     success: true,
     count: blog.length,
@@ -20,7 +19,10 @@ exports.getBlogs = asyncHandler(async (req, res, next) => {
 //@route /api/blog/:id
 //access PRIVATE
 exports.getBlog = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.findById(req.params.id);
+  const blog = await Blog.findById(req.params.id).populate({
+    path: "user",
+    select: "name email",
+  });
 
   if (!blog) {
     return next(new errorHandler(`blog Not Found`, 404));

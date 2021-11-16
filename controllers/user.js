@@ -3,7 +3,7 @@ const errorHandler = require("../utils/errorHandler");
 const User = require("../models/User");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
-  const user = await User.find();
+  const user = await User.find().populate("blogs");
   res.status(200).json({
     success: true,
     data: user,
