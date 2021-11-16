@@ -1,0 +1,73 @@
+[
+  {
+    "name": "Swastik Chaudhary",
+    "email": "swastikkumar50@gmail.com",
+    "role": "user",
+    "password": "swastik123"
+  },
+  {
+    "name": "Leanne Graham",
+    "email": "Sincere@april.biz",
+    "role": "user",
+    "password": "leanneg123"
+  },
+  {
+    "name": "Ervin Howell",
+    "email": "Shanna@melissa.tv",
+    "role": "user",
+    "password": "erwinh123"
+  },
+  {
+    "name": "Clementine Bauch",
+
+    "email": "Nathan@yesenia.net",
+    "role": "user",
+    "password": "clementineb123"
+  },
+  {
+    "name": "Patricia Lebsack",
+    "email": "Julianne.OConner@kory.org",
+    "role": "user",
+    "password": "patricia123"
+  },
+  {
+    "name": "Chelsey Dietrich",
+    "email": "Lucio_Hettinger@annie.ca",
+    "role": "user",
+    "password": "chelsey1"
+  },
+  {
+    "name": "Mrs. Dennis Schulist",
+    "email": "Karley_Dach@jasper.info",
+    "role": "user",
+    "password": "karley123"
+  },
+  {
+    "name": "Kurtis Weissnat",
+
+    "email": "Telly.Hoeger@billy.biz",
+    "role": "user",
+    "password": "telly123"
+  },
+  {
+    "name": "Nicholas Runolfsdottir V",
+
+    "email": "Sherwood@rosamond.me",
+    "role": "user",
+    "password": "sherwood123"
+  },
+  {
+    "name": "Glenna Reichert",
+
+    "email": "Chaim_McDermott@dana.io",
+    "role": "user",
+    "password": "chaim123"
+  },
+  {
+    "name": "Clementina DuBuque",
+
+    "email": "Rey.Padberg@karina.biz",
+    "role": "user",
+    "password": "reypadber123"
+  }
+]
