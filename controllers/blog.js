@@ -7,7 +7,14 @@ const User = require("../models/User");
 //@route /api/blog
 //access PRIVATE
 exports.getBlogs = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.find();
+  let query;
+  if (req.params.userId) {
+    query = Blog.find({ user: req.params.userId });
+  } else {
+    query = await Blog.find();
+  }
+
+  const blog = await query;
   res.status(200).json({
     success: true,
     count: blog.length,
@@ -33,22 +40,6 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
   });
 });
 
-//request GET
-//@route /api/:userId/blogs
-//access PUBLIC
-exports.getUsersBlog = asyncHandler(async (req, res, next) => {
-  const blogs = await Blog.find({ user: req.user.id });
-
-  if (!blogs) {
-    return next(new errorHandler(`Blogs Not Found`, 404));
-  }
-
-  res.status(200).json({
-    success: true,
-    data: blog,
-  });
-});
-
 //request POST
 //@route /api/blog
 //access PRIVATE
@@ -67,7 +58,9 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 //@route /api/blog/:id
 //access PRIVATE
 exports.updateBlog = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.findById(req.params.id);
+  let id = req.params.id;
+
+  let blog = await Blog.findById(id);
 
   if (!blog) {
     return next(new errorHandler(`Blog Not Found`, 404));
@@ -83,11 +76,11 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
     );
   }
 
-  blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
-    runValidators: true,
+  let data = await Blog.findByIdAndUpdate(id, req.body, {
     new: true,
+    runValidators: true,
   });
-
+  console.log("success");
   res.status(200).json({
     success: true,
     data: blog,
