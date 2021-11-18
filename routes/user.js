@@ -12,10 +12,17 @@ const {
 // Get blogs router
 const blogRouter = require("./blog");
 
+const { protect, authorize } = require("../middlewares/auth");
+
 // Re-route
 router.use("/:userId/blogs", blogRouter);
 
-router.route("/").get(getUsers).post(createUser);
-router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
+router.route("/").get(authorize("admin"), getUsers).postauthorize("admin"),
+  createUser;
+router
+  .route("/:id")
+  .get(authorize("admin"), getUser)
+  .put(authorize("admin"), updateUser)
+  .delete(authorize("admin"), deleteUser);
 
 module.exports = router;
