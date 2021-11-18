@@ -4,7 +4,7 @@ const Blog = require("../models/Blog");
 const User = require("../models/User");
 
 //request GET
-//@route /api/blog
+//@route /api/blog or /api/:userId/blogs
 //access PRIVATE
 exports.getBlogs = asyncHandler(async (req, res, next) => {
   let query;
@@ -32,7 +32,7 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
   });
 
   if (!blog) {
-    return next(new errorHandler(`blog Not Found`, 404));
+    return next(new errorHandler(`Blog Not Found`, 404));
   }
   res.status(200).json({
     success: true,
@@ -76,10 +76,7 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
     );
   }
 
-  let data = await Blog.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  let data = await Blog.findByIdAndUpdate(id, req.body);
   console.log("success");
   res.status(200).json({
     success: true,
@@ -91,10 +88,10 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 //@route /api/blog/:id
 //access PRIVATE
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.findByIdAndDelete(req.params.id);
+  const blog = await Blog.findById(req.params.id);
 
   if (!blog) {
-    return next(new errorHandler(`blog Not Found`, 404));
+    return next(new errorHandler(`Blog Not Found`, 404));
   }
 
   // Check for Blog user's Ownership

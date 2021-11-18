@@ -13,6 +13,10 @@ const {
 const { protect } = require("../middlewares/auth");
 
 router.route("/").get(getBlogs).post(protect, createBlog);
-router.route("/:id").get(getBlog).put(protect, updateBlog).delete(deleteBlog);
+router
+  .route("/:id")
+  .get(getBlog)
+  .put(protect, updateBlog)
+  .delete(protect, deleteBlog);
 
 module.exports = router;

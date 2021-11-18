@@ -37,6 +37,19 @@ exports.getMe = asyncHandler(async (req, res, next) => {
   res.json({ message: "User Logged In", data: user });
 });
 
+// Generate Forget Password Token
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  //Checking if User Exists
+  if (!user) {
+    return next(new errorHandler("User Not Found", 404));
+  }
+
+  const resetToken = user.getResetPasswordToken();
+  res.json({ message: "User Logged In", data: user });
+});
+
 // Get Token from model,create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
   //Create Token
