@@ -109,6 +109,51 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
+//@desc  Update User Details
+//@route PUT /api/auth/updatedetails
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+  const fieldstoUpdate = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  let user = await User.findByIdAndUpdate(req.user.id, fieldstoUpdate, {
+    runValidators: true,
+    new: true,
+  });
+
+  res.status(200).json({ success: true, data: user });
+});
+
+//@desc  Update User Passwords
+//@route PUT /api/auth/updatepassword
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  const password = req.body.password;
+
+  let user = await User.findById(req.user.id).select("+password");
+
+  if (!(await user.checkPassword(password))) {
+    return next(new errorHandler(`Password is incorrect`, 401));
+  }
+
+  user.password = password;
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
+});
+
+//@desc  Delete User
+//@route PUT /api/auth/delete
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  let user = await User.findByIdAndRemove(req.user.id);
+
+  if (!user) {
+    return next(new errorHandler(`User not Found`, 404));
+  }
+
+  res.status(200).json({ success: true, message: "User deleted Successfully" });
+});
+
 // Get Token from model,create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
   //Create Token
