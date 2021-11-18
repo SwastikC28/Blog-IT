@@ -28,10 +28,6 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(message, 400);
   }
 
-  // if (err.name === "TypeError") {
-  //   let message = "Unauthorized. Please Login to Continue";
-  //   error = new ErrorResponse(message, 403);
-  // }
   // Send HANDLED ERROR
   res
     .status(error.statusCode || 500)

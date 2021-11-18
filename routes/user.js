@@ -14,15 +14,13 @@ const blogRouter = require("./blog");
 
 const { protect, authorize } = require("../middlewares/auth");
 
+router.use(protect);
+router.use(authorize("admin"));
+
 // Re-route
 router.use("/:userId/blogs", blogRouter);
 
-router.route("/").get(authorize("admin"), getUsers).postauthorize("admin"),
-  createUser;
-router
-  .route("/:id")
-  .get(authorize("admin"), getUser)
-  .put(authorize("admin"), updateUser)
-  .delete(authorize("admin"), deleteUser);
+router.route("/").get(getUsers).post(createUser);
+router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 
 module.exports = router;
