@@ -30,6 +30,9 @@ const UserSchema = new mongoose.Schema(
       minlength: 6,
       select: false,
     },
+    resetPasswordToken: String,
+
+    resetPasswordExpire: Date,
 
     createdAt: {
       type: Date,
@@ -52,6 +55,9 @@ UserSchema.virtual("blogs", {
 
 // Hashing Passwords
 UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
@@ -69,17 +75,19 @@ UserSchema.methods.checkPassword = async function (enteredPassword) {
 };
 
 // Generate and hash password token
-UserSchema.methods.getResetPasswordToken()=async function(){
-
+UserSchema.methods.getResetPasswordToken = async function () {
   // Generate Token
-  const resetToken=crypto.randomBytes(20).toString('hex')
+  const resetToken = crypto.randomBytes(20).toString("hex");
 
   // Hash Token and set to resetPasswordToken field
-  this.resetPasswordToken=crypto.createHash('sha256').update(resetToken).digest('hex')
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
   // Set Expiry
-  this.resetPasswordExpire=Date.now()+10*60*1000;
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
-  return resetToken
-}
+  return resetToken;
+};
 module.exports = mongoose.model("User", UserSchema);
