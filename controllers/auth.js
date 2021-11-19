@@ -5,7 +5,16 @@ const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 
 exports.register = asyncHandler(async (req, res, next) => {
-  const user = await User.create(req.body);
+  const { name, email, password, role } = req.body;
+
+  // Create user
+  const user = await User.create({
+    name,
+    email,
+    password,
+    role,
+  });
+
   sendTokenResponse(user, 200, res);
 });
 
@@ -162,11 +171,14 @@ exports.logout = asyncHandler(async (req, res, next) => {
     httpOnly: true,
   });
 
-  res.status(200).json({ success: true, message: "Logged Out Successfully" });
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
 });
 // Get Token from model,create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
-  //Create Token
+  // Create token
   const token = user.getSignedJwtToken();
 
   const options = {
@@ -180,8 +192,8 @@ const sendTokenResponse = (user, statusCode, res) => {
     options.secure = true;
   }
 
-  res
-    .status(statusCode)
-    .cookie("token", token, options)
-    .json({ success: true, token });
+  res.status(statusCode).cookie("token", token, options).json({
+    success: true,
+    token,
+  });
 };

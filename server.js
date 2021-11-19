@@ -18,6 +18,8 @@ const auth = require("./routes/auth");
 const app = express();
 app.use(express.json());
 
+app.use(cookieParser());
+
 //Connecting To The Database
 connectDB();
 
@@ -28,7 +30,6 @@ app.use("/api/auth", auth);
 
 // Using Middlewares
 app.use(errorHandler);
-app.use(cookieParser());
 
 let PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
